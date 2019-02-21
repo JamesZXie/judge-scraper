@@ -2,6 +2,8 @@ import json
 import glob
 import csv
 from pymongo import MongoClient
+from datetime import datetime
+import re
 
 NI_V2_PATH = "../n_il/json_v2/*.json"
 FED_JUDGES_PATH = "../judges/judges.csv"
@@ -37,12 +39,30 @@ def import_cases(cases_path, case_judges_path, district):
 
                     data["judge"] = [data["judge"], assigned_judge]
                     data["_id"] = data.pop("case_id")
+
+                    try:
+                        data["filing_date"] = datetime.strptime(data["filing_date"], '%m/%d/%Y')
+                    except (ValueError, TypeError):
+                        pass
+                    
+                    try:
+                        data["terminating_date"] = datetime.strptime(data["terminating_date"], '%m/%d/%Y')
+                    except (ValueError, TypeError):
+                        pass
+                    
+                    for i, item in enumerate(data["docket"]):
+                        try:
+                            data["docket"][i] = [datetime.strptime(data["docket"][i][0], '%m/%d/%Y'), data["docket"][i][1], data["docket"][i][2]]
+                        except (ValueError, TypeError):
+                            pass
+
                     data["district"] = district
 
                     data = sanitize_keys(data)
                     collection_cases.insert(data)
 
 def import_judges(path):
+    # @TODO: Convert all judge date fields to date objects if necessary
     judge_template = {}
     with open(path) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')

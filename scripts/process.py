@@ -202,4 +202,21 @@ def count_cases(path):
             count += 1
     return count
 
-print(count_cases(NI_PATH_V2))
+def date_breakdown(path):
+    filing_dates = {}
+    for x in glob.glob(path):
+        with open(x) as f:
+            data = json.load(f)
+            curr_filing_date = ''
+            try:
+                curr_filing_date = data["filing_date"].split('/')
+                curr_filing_date = curr_filing_date[0] + '/' + curr_filing_date[2]
+            except:
+                pass
+            if filing_dates.get(curr_filing_date) == None:
+                filing_dates[curr_filing_date] = 1
+            else:
+                filing_dates[curr_filing_date] += 1
+    return filing_dates
+
+print(date_breakdown(NI_PATH_V2))
