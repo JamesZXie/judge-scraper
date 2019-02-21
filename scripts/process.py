@@ -189,4 +189,17 @@ def getIlCivilPartyNames(path):
 # print(getFederalJudgesWithIds(FED_JUDGES_PATH))
 # print(matchCaseIdsToJudgeIds(NI_PATH_V2, NIJudgeStringsToIgnoreV2, IL_JUDGES_IDS))
 
-print(getIlCivilPartyNames(NI_PATH_V2))
+# print(getIlCivilPartyNames(NI_PATH_V2))
+
+
+def count_cases(path):
+    count = 0
+    for x in glob.glob(path):
+        with open(x) as f:
+            data = json.load(f)
+            if data.get("case_id") == None:
+                continue
+            count += 1
+    return count
+
+print(count_cases(NI_PATH_V2))
