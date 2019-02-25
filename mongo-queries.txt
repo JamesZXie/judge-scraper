@@ -1,4 +1,4 @@
-## number of cases across time
+## number of cases across time (filing date)
 
 db.cases.aggregate(
     [
@@ -17,7 +17,9 @@ db.cases.aggregate(
     ]
 )
 
-## number of cases across time separated by case type
+
+## number of cases across time separated by case type (filing date)
+
 
 db.cases.aggregate(
     [
@@ -37,4 +39,47 @@ db.cases.aggregate(
         }
     ]
 )
+
+## number of cases across time separated by case type (terminating date)
+
+db.cases.aggregate(
+    [
+        {
+            $group: {
+                _id: {
+                    year: { $year: "$terminating_date" },
+                    month: { $month: "$terminating_date" },
+                },
+                count_cr: { $sum: {$cond: [ {$eq: [ "$case_type", "cr"]}, 1, 0 ]} },
+                count_cv: { $sum: {$cond: [ {$eq: [ "$case_type", "cv"]}, 1, 0 ]} },
+                count_total: { $sum: 1 }
+            }
+        },
+        { 
+            $sort : { "_id.year" : 1, "_id.month": 1 }
+        }
+    ]
+)
+
+db.judges.aggregate(
+    [
+        {
+            $lookup: {
+                from: "cases",
+                localField: "_id",
+                foreignField: "judge[1]",
+                as: "matched_cases"
+            }
+        },
+    ]
+)
+        {
+            $unwind: {
+                path: "$matched_cases",
+                preserveNullAndEmptyArrays: false
+            }
+        }
+
+
+
 

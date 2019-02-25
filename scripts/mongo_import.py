@@ -6,8 +6,14 @@ from datetime import datetime
 import re
 
 NI_V2_PATH = "../n_il/json_v2/*.json"
+
+NI_PATH = "../n_il/json/*.json"
+NG_PATH = "../n_ga/json/*.json"
+
 FED_JUDGES_PATH = "../judges/judges.csv"
-CASE_JUDGES_PATH = "../output/il_case_to_judge_id.txt"
+
+IL_CASE_JUDGES_PATH = "../output/il_case_to_judge_id.txt"
+GA_CASE_JUDGES_PATH = "../output/ga_case_to_judge_id.txt"
 
 client = MongoClient('localhost', 27017)
 
@@ -15,12 +21,12 @@ db = client['crxss_db']
 collection_cases = db['cases']
 collection_judges = db['judges']
 
-def sanitize_keys(d):
+def sanitize_keys(d, char):
     new = {}
     for k, v in d.items():
         if isinstance(v, dict):
-            v = sanitize_keys(v)
-        new[k.replace('.', '')] = v
+            v = sanitize_keys(v, char)
+        new[k.replace(char, '')] = v
     return new
 
 def import_cases(cases_path, case_judges_path, district):
@@ -35,7 +41,7 @@ def import_cases(cases_path, case_judges_path, district):
                         continue
 
                     if case_judges.get(data["case_id"]) != None:
-                        assigned_judge = case_judges[data["case_id"]]
+                        assigned_judge = str(case_judges[data["case_id"]])
 
                     data["judge"] = [data["judge"], assigned_judge]
                     data["_id"] = data.pop("case_id")
@@ -58,7 +64,8 @@ def import_cases(cases_path, case_judges_path, district):
 
                     data["district"] = district
 
-                    data = sanitize_keys(data)
+                    data = sanitize_keys(data, '.')
+                    data = sanitize_keys(data, '$')
                     collection_cases.insert(data)
 
 def import_judges(path):
@@ -87,7 +94,8 @@ def main():
         print("The database exists. Please drop before re-importing.")
         return
 
-    import_cases(NI_V2_PATH, CASE_JUDGES_PATH, "Northern District of Illinois")
+    import_cases(NI_PATH, IL_CASE_JUDGES_PATH, "Northern District of Illinois")
+    import_cases(NG_PATH, GA_CASE_JUDGES_PATH, "Northern District of Georgia")
     import_judges(FED_JUDGES_PATH)
 
 main()
