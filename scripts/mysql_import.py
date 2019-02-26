@@ -1,5 +1,6 @@
 #@TODO Add plaintiffs, defendants, docket items once we figure out how those will be given to us / parsed
 #@TODO Parse nature of suit characters and create a separate table - do same for cause, jury demand, jurisdiction
+#@TODO investigate errors from declaring FK constraints
 
 import mysql.connector
 import json
@@ -29,7 +30,7 @@ db_connection = mysql.connector.connect(
 
 mycursor = db_connection.cursor()
 
-def import_cases(cases_path, case_judges_path, district):
+def create_tables():
     mycursor.execute("DROP TABLE IF EXISTS cases")
     mycursor.execute("""
                         CREATE TABLE cases 
@@ -47,6 +48,66 @@ def import_cases(cases_path, case_judges_path, district):
                         jurisdiction VARCHAR(255),
                         district VARCHAR(255))
                     """)
+
+    mycursor.execute("DROP TABLE IF EXISTS federal_judges_demographics")
+    mycursor.execute("""
+                        CREATE TABLE federal_judges_demographics 
+                        (id INT PRIMARY KEY, 
+                        last_name VARCHAR(255),
+                        first_name VARCHAR(255),
+                        middle_name VARCHAR(255),
+                        suffix VARCHAR(10),
+                        birth_month INT,
+                        birth_day INT,
+                        birth_year INT,
+                        birth_city VARCHAR(255),
+                        birth_state VARCHAR(20),
+                        death_month INT,
+                        death_day INT,
+                        death_year INT,
+                        death_city VARCHAR(255),
+                        death_state VARCHAR(20),
+                        gender VARCHAR(20),
+                        ethnicity VARCHAR(255))
+                    """)
+    
+    mycursor.execute("DROP TABLE IF EXISTS federal_judges_education")
+    mycursor.execute("""
+                        CREATE TABLE federal_judges_education 
+                        (nid INT, 
+                        sequence INT,
+                        school VARCHAR(255),
+                        degree VARCHAR(255),
+                        year INT,
+                        PRIMARY KEY (nid, sequence))
+                    """)
+
+    mycursor.execute("DROP TABLE IF EXISTS federal_judges_career")
+    mycursor.execute("""
+                    CREATE TABLE federal_judges_career
+                    (nid INT, 
+                    sequence INT,
+                    career TEXT,
+                    PRIMARY KEY (nid, sequence))
+                """)
+    
+    mycursor.execute("DROP TABLE IF EXISTS federal_judges_service")
+    mycursor.execute("""
+                    CREATE TABLE federal_judges_service
+                    (nid INT, 
+                    sequence INT,
+                    court_type VARCHAR(255),
+                    court_name VARCHAR(255),
+                    appointment_title VARCHAR(255),
+                    appointing_president VARCHAR(255),
+                    appointing_president_party VARCHAR(255),
+                    aba_rating VARCHAR(255),
+                    ayes INT,
+                    nays INT,
+                    PRIMARY KEY (nid, sequence))
+                """)
+
+def import_cases(cases_path, case_judges_path, district):
     with open(case_judges_path) as f:
         case_judges = json.load(f)
         for x in glob.glob(cases_path):
@@ -82,27 +143,6 @@ def import_cases(cases_path, case_judges_path, district):
 
 
 def import_federal_judges_demographics(path):
-    mycursor.execute("DROP TABLE IF EXISTS federal_judges_demographics")
-    mycursor.execute("""
-                        CREATE TABLE federal_judges_demographics 
-                        (id INT PRIMARY KEY, 
-                        last_name VARCHAR(255),
-                        first_name VARCHAR(255),
-                        middle_name VARCHAR(255),
-                        suffix VARCHAR(10),
-                        birth_month INT,
-                        birth_day INT,
-                        birth_year INT,
-                        birth_city VARCHAR(255),
-                        birth_state VARCHAR(20),
-                        death_month INT,
-                        death_day INT,
-                        death_year INT,
-                        death_city VARCHAR(255),
-                        death_state VARCHAR(20),
-                        gender VARCHAR(20),
-                        ethnicity VARCHAR(255))
-                    """)
     with open(path) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for i, row in enumerate(readCSV):
@@ -135,16 +175,6 @@ def import_federal_judges_demographics(path):
             db_connection.commit()
 
 def import_federal_judges_education(path):
-    mycursor.execute("DROP TABLE IF EXISTS federal_judges_education")
-    mycursor.execute("""
-                        CREATE TABLE federal_judges_education 
-                        (nid INT, 
-                        sequence INT,
-                        school VARCHAR(255),
-                        degree VARCHAR(255),
-                        year INT,
-                        PRIMARY KEY (nid, sequence))
-                    """)
     with open(path) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for i, row in enumerate(readCSV):
@@ -162,14 +192,6 @@ def import_federal_judges_education(path):
             db_connection.commit()
 
 def import_federal_judges_career(path):
-    mycursor.execute("DROP TABLE IF EXISTS federal_judges_career")
-    mycursor.execute("""
-                    CREATE TABLE federal_judges_career
-                    (nid INT, 
-                    sequence INT,
-                    career TEXT
-                    PRIMARY KEY (nid, sequence))
-                """)
     with open(path) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for i, row in enumerate(readCSV):
@@ -185,34 +207,6 @@ def import_federal_judges_career(path):
             db_connection.commit()
 
 def import_federal_judges_service(path):
-    "nid",
-    "Sequence",
-    "Judge Name",
-    "Court Type",
-    "Court Name",
-    "Appointment Title",
-    "Appointing President","Party of Appointing President","Reappointing President",
-    "Party of Reappointing President","ABA Rating","Seat ID","Statute Authorizing New Seat",
-    "Recess Appointment Date","Nomination Date","Committee Referral Date","Hearing Date","Judiciary Committee Action",
-    "Committee Action Date","Senate Vote Type","Ayes/Nays","Confirmation Date","Commission Date",
-    "Service as Chief Judge, Begin","Service as Chief Judge, End","2nd Service as Chief Judge, Begin",
-    "2nd Service as Chief Judge, End","Senior Status Date","Termination","Termination Date"
-
-    mycursor.execute("DROP TABLE IF EXISTS federal_judges_service")
-    mycursor.execute("""
-                    CREATE TABLE federal_judges_service
-                    (nid INT, 
-                    sequence INT,
-                    court_type VARCHAR(255),
-                    court_name VARCHAR(255),
-                    appointment_title VARCHAR(255),
-                    appointing_president VARCHAR(255),
-                    appointing_president_party VARCHAR(255),
-                    aba_rating VARCHAR(255),
-                    ayes INT,
-                    nays INT,
-                    PRIMARY KEY (nid, sequence))
-                """)
     with open(path) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for i, row in enumerate(readCSV):
@@ -243,9 +237,10 @@ def import_federal_judges_service(path):
 
 
 def main():
+    create_tables()
+    import_federal_judges_demographics(FED_JUDGES_DEMOGRAPHICS_PATH)
     import_cases(NI_PATH, IL_CASE_JUDGES_PATH, "Northern District of Illinois")
     import_cases(NG_PATH, GA_CASE_JUDGES_PATH, "Northern District of Georgia")
-    import_federal_judges_demographics(FED_JUDGES_DEMOGRAPHICS_PATH)
     import_federal_judges_education(FED_JUDGES_EDUCATION_PATH)
     import_federal_judges_career(FED_JUDGES_CAREER_PATH)
     import_federal_judges_service(FED_JUDGES_SERVICE_PATH)
