@@ -43,7 +43,7 @@ def create_tables():
                         federal_judge_id INT,
                         year YEAR,
                         type VARCHAR(10),
-                        nature_suit VARCHAR(255),
+                        nos_code INT,
                         name VARCHAR(255),
                         jury_demand VARCHAR(255),
                         cause VARCHAR(255),
@@ -142,6 +142,12 @@ def import_cases(cases_path, case_judges_path, district):
                         data["terminating_date"] = datetime.strptime(data["terminating_date"], '%m/%d/%Y').strftime('%Y-%m-%d')
                     except (ValueError, TypeError):
                         pass
+
+                    if  data["nature_suit"]:
+                        if data["nature_suit"].split(" ")[0] == "Taxes":
+                            data["nature_suit"] = 870
+                        else:
+                            data["nature_suit"] = data["nature_suit"].split(" ")[0]
 
                     mycursor.execute("""
                                 INSERT INTO cases

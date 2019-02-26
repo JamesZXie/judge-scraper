@@ -109,5 +109,11 @@ FROM cases
 INNER JOIN federal_judges_demographics ON cases.federal_judge_id=federal_judges_demographics.id
 GROUP BY ethnicity;
 
+-Total distribution of nature of suit, ordered descending
 
+SELECT nos_code, title, count(*) as total_cases
+FROM cases 
+INNER JOIN nature_of_suit ON nos_code=code
+GROUP BY nos_code
+ORDER BY total_cases DESC;
 

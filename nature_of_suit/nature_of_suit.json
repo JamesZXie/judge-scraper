@@ -55,7 +55,8 @@
         "444": "Welfare",
         "445": "Amer w/Disabilities-Employment",
         "446": "Amer w/Disabilities - Other",
-        "448": "Education"
+        "448": "Education",
+        "450": "Commerce"
     },
     "IMMIGRATION": {
         "462": "Naturalization Application",
@@ -97,6 +98,7 @@
     "PROPERTY RIGHTS": {
         "820": "Copyrights",
         "830": "Patent",
+        "835": "Patent – Abbreviated New Drug Application (ANDA)",
         "840": "Trademark"
     },
     "SOCIAL SECURITY": {
@@ -111,13 +113,14 @@
         "871": "IRS-Third Party 26 USC 7609"
     },
     "OTHER STATUTES": {
+        "376": "Qui Tam (31 U.S.C. § 3729(a))",
         "400": "State Reapportionment",
         "410": "Antitrust",
         "430": "Banks and Banking",
-        "450": "Commerce",
         "460": "Deportation",
         "470": "Racketeer Influenced and Corrupt Organizations",
         "480": "Consumer Credit",
+        "485": "Telephone Consumer Protection Act (TCPA)",
         "490": "Cable/Sat TV",
         "810": "Selective Service",
         "850": "Securities/Commodities/Exchange",
@@ -131,6 +134,7 @@
         "896": "Arbitration",
         "899": "Administrative Procedure Act/Review or Appeal of Agency Decision",
         "900": "Appeal of Fee Determination Under Equal Access to Justice Act",
-        "950": "Constitutionality of State Statutes"
+        "950": "Constitutionality of State Statutes",
+        "999": "Miscellaneous Cases"
     }
 }
