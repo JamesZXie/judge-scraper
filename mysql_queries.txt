@@ -1,0 +1,113 @@
+-Distribution of total cases over time
+
+SELECT DATE_FORMAT(terminating_date,'%Y-%m') AS date, COUNT(*) AS total_cases
+    FROM cases GROUP BY DATE_FORMAT(terminating_date,'%Y-%m');
+
+-Distribution of case types over time
+
+SELECT
+    DATE_FORMAT(terminating_date,'%Y-%m') AS Date,
+    sum( if( type = 'cr', 1, 0 ) ) AS cr_total, 
+    sum( if( type = 'cv', 1, 0 ) ) AS cv_total
+    FROM cases GROUP BY DATE_FORMAT(terminating_date,'%Y-%m');
+
+-Distribution of case types across districts
+
+-Total cases per federal judge 
+
+SELECT
+    federal_judge_id, last_name, first_name, middle_name, COUNT(*) AS total_cases
+    FROM cases
+    INNER JOIN federal_judges_demographics ON cases.federal_judge_id=federal_judges_demographics.id
+    GROUP BY federal_judge_id;
+
+-Total cases per federal judge by case type
+
+SELECT
+    federal_judge_id, last_name, first_name, middle_name,
+    sum( if( type = 'cr', 1, 0 ) ) AS cr_total, 
+    sum( if( type = 'cv', 1, 0 ) ) AS cv_total
+    FROM cases
+    INNER JOIN federal_judges_demographics ON cases.federal_judge_id=federal_judges_demographics.id
+    GROUP BY federal_judge_id;
+
+-Total cases by district vs appellate judge
+
+SELECT
+    court_type,
+    count(*) as total_cases
+FROM cases
+INNER JOIN federal_judges_service ON cases.federal_judge_id=federal_judges_service.nid
+GROUP BY court_type;
+
+-Total cases by case type by district vs appellate judge
+
+SELECT
+    court_type,
+    sum( if( type = 'cr', 1, 0 ) ) AS cr_total, 
+    sum( if( type = 'cv', 1, 0 ) ) AS cv_total
+FROM cases
+INNER JOIN federal_judges_service ON cases.federal_judge_id=federal_judges_service.nid
+GROUP BY court_type;
+
+-Total cases by political party
+
+select appointing_president_party, count(*) from federal_judges_service group by appointing_president_party;
+
+SELECT
+    appointing_president_party,
+    count(*) as total_cases
+FROM cases
+INNER JOIN federal_judges_service ON cases.federal_judge_id=federal_judges_service.nid
+GROUP BY appointing_president_party;
+
+-Total cases by political party by case type
+
+SELECT
+    appointing_president_party,
+    sum( if( type = 'cr', 1, 0 ) ) AS cr_total, 
+    sum( if( type = 'cv', 1, 0 ) ) AS cv_total
+FROM cases
+INNER JOIN federal_judges_service ON cases.federal_judge_id=federal_judges_service.nid
+GROUP BY appointing_president_party;
+
+-Total cases by gender
+
+SELECT
+    gender,
+    count(*) as total_cases
+FROM cases
+INNER JOIN federal_judges_demographics ON cases.federal_judge_id=federal_judges_demographics.id
+GROUP BY gender;
+
+-Total cases by type by gender
+
+SELECT
+    gender,
+    sum( if( type = 'cr', 1, 0 ) ) AS cr_total, 
+    sum( if( type = 'cv', 1, 0 ) ) AS cv_total
+FROM cases
+INNER JOIN federal_judges_demographics ON cases.federal_judge_id=federal_judges_demographics.id
+GROUP BY gender;
+
+-Total cases by ethnicity
+
+SELECT
+    ethnicity,
+    COUNT(*) AS total_cases
+FROM cases
+INNER JOIN federal_judges_demographics ON cases.federal_judge_id=federal_judges_demographics.id
+GROUP BY ethnicity;
+
+-Total cases by case type by ethnicity
+
+SELECT
+    ethnicity,
+    sum( if( type = 'cr', 1, 0 ) ) AS cr_total, 
+    sum( if( type = 'cv', 1, 0 ) ) AS cv_total
+FROM cases
+INNER JOIN federal_judges_demographics ON cases.federal_judge_id=federal_judges_demographics.id
+GROUP BY ethnicity;
+
+
+
