@@ -21,6 +21,8 @@ FED_JUDGES_CAREER_PATH = "../judges/professional-career.csv"
 IL_CASE_JUDGES_PATH = "../output/il_case_to_judge_id.txt"
 GA_CASE_JUDGES_PATH = "../output/ga_case_to_judge_id.txt"
 
+NATURE_OF_SUIT_PATH = "../nature_of_suit/nature_of_suit.json"
+
 db_connection = mysql.connector.connect(
     host=DB_HOST,
     user=DB_USER,
@@ -105,6 +107,14 @@ def create_tables():
                     ayes INT,
                     nays INT,
                     PRIMARY KEY (nid, sequence))
+                """)
+    mycursor.execute("DROP TABLE IF EXISTS nature_of_suit")
+    mycursor.execute("""
+                    CREATE TABLE nature_of_suit
+                    (code INT PRIMARY KEY, 
+                    title VARCHAR(255),
+                    category VARCHAR(255)
+                    )
                 """)
 
 def import_cases(cases_path, case_judges_path, district):
@@ -235,6 +245,16 @@ def import_federal_judges_service(path):
                                 ayes, nays))
             db_connection.commit()
 
+def import_nature_of_suit(path):
+    with open(path) as f:
+        nos = json.load(f)
+        for category_key, category_value in nos.items():
+            for code, title in category_value.items():
+                mycursor.execute("""
+                                INSERT INTO nature_of_suit
+                                VALUES (%s, %s, %s)
+                            """, (code, title, category_key))
+                db_connection.commit()
 
 def main():
     create_tables()
@@ -244,5 +264,5 @@ def main():
     import_federal_judges_education(FED_JUDGES_EDUCATION_PATH)
     import_federal_judges_career(FED_JUDGES_CAREER_PATH)
     import_federal_judges_service(FED_JUDGES_SERVICE_PATH)
-
+    import_nature_of_suit(NATURE_OF_SUIT_PATH)
 main()

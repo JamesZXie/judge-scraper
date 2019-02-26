@@ -1,0 +1,136 @@
+{
+    "CONTRACT": {
+        "110": "Insurance",
+        "120": "Marine",
+        "130": "Miller Act",
+        "140": "Negotiable Instrument",
+        "150": "Recovery of Overpayment & Enforcement of Judgment",
+        "151": "Medicare Act",
+        "152": "Recovery of Defaulted Student Loans (Excl. Veterans)",
+        "153": "Recovery of Overpayment of Veteran’s Benefits",
+        "160": "Stockholders’ Suits",
+        "190": "Other Contract",
+        "195": "Contract Product Liability",
+        "196": "Franchise"
+    },
+    "REAL PROPERTY": {
+        "210": "Land Condemnation",
+        "220": "Foreclosure",
+        "230": "Rent Lease & Ejectment",
+        "240": "Torts to Land",
+        "245": "Tort Product Liability",
+        "290": "All Other Real Property"
+    },
+    "TORTS - Personal Injury": {
+        "310": "Airplane",
+        "315": "Airplane Product Liability",
+        "320": "Assault, Libel, & Slander",
+        "330": "Federal Employers’ Liability",
+        "340": "Marine",
+        "345": "Marine Product Liability",
+        "350": "Motor Vehicle",
+        "355": "Motor Vehicle Product Liability",
+        "360": "Other Personal Injury",
+        "362": "Personal Injury- Medical Malpractice",
+        "365": "Personal Injury- Product Liability",
+        "367": "Personal Injury - Health Care/Pharmaceutical Personal Injury/Product Liability",
+        "368": "Asbestos Personal Injury Product Liability",
+        "375": "False Claims Act"
+    },
+    "TORTS - Personal Property": {
+        "370": "Other Fraud",
+        "371": "Truth in Lending",
+        "380": "Other Personal Property Damage",
+        "385": "Property Damage Product Liability"
+    },
+    "BANKRUPTCY": {
+        "422": "Appeal 28 USC 158",
+        "423": "Withdrawal 28 USC 157"
+    },
+    "CIVIL RIGHTS": {
+        "440": "Other Civil Rights",
+        "441": "Voting",
+        "442": "Employment",
+        "443": "Housing/Accommodations",
+        "444": "Welfare",
+        "445": "Amer w/Disabilities-Employment",
+        "446": "Amer w/Disabilities - Other",
+        "448": "Education"
+    },
+    "IMMIGRATION": {
+        "462": "Naturalization Application",
+        "463": "Habeas Corpus - Alien Detainee",
+        "465": "Other Immigration Actions"
+    },
+    "PRISONER PETITIONS" : {
+        "510": "Motions to Vacate Sentence"
+    },
+    "PRISONER PETITIONS - Habeas Corpus" : {
+        "530": "General",
+        "535": "Death Penalty",
+        "540": "Mandamus & Other",
+        "550": "Civil Rights",
+        "555": "Prison Condition"
+    },
+    "PRISONER PETITIONS - Civil Detainee" : {
+        "560": "Conditions of Confinement"
+    },
+    "FORFEITURE/PENALTY" : {
+        "610": "Agriculture",
+        "620": "Other Food & Drug",
+        "625": "Drug Related Seizure of Property 21 USC 881",
+        "630": "Liquor Laws",
+        "640": "RR & Truck",
+        "650": "Airline Regulations",
+        "660": "Occupational Safety/Health",
+        "690": "Other"
+    },
+    "LABOR": {
+        "710": "Fair Labor Standards Act",
+        "720": "Labor/Management Relations",
+        "730": "Labor/Management Reporting & Disclosure Act",
+        "740": "Railway Labor Act",
+        "751": "Family and Medical Leave Act",
+        "790": "Other Labor Litigation",
+        "791": "Employee Retirement Income Security Act"
+    },
+    "PROPERTY RIGHTS": {
+        "820": "Copyrights",
+        "830": "Patent",
+        "840": "Trademark"
+    },
+    "SOCIAL SECURITY": {
+        "861": "HIA (1395ff)",
+        "862": "Black Lung (923)",
+        "863": "DIWC/DIWW (405(g))",
+        "864": "SSID Title XVI",
+        "865": "RSI (405(g))"
+    },
+    "FEDERAL TAX SUITS": {
+        "870": "Taxes (U.S. Plaintiff or Defendant)",
+        "871": "IRS-Third Party 26 USC 7609"
+    },
+    "OTHER STATUTES": {
+        "400": "State Reapportionment",
+        "410": "Antitrust",
+        "430": "Banks and Banking",
+        "450": "Commerce",
+        "460": "Deportation",
+        "470": "Racketeer Influenced and Corrupt Organizations",
+        "480": "Consumer Credit",
+        "490": "Cable/Sat TV",
+        "810": "Selective Service",
+        "850": "Securities/Commodities/Exchange",
+        "875": "Customer Challenge 12 USC 34101",
+        "890": "Other Statutory Actions",
+        "891": "Agricultural Acts",
+        "892": "Economic Stabilization Act",
+        "893": "Environmental Matters",
+        "894": "Energy Allocation Act",
+        "895": "Freedom of Information Act",
+        "896": "Arbitration",
+        "899": "Administrative Procedure Act/Review or Appeal of Agency Decision",
+        "900": "Appeal of Fee Determination Under Equal Access to Justice Act",
+        "950": "Constitutionality of State Statutes"
+    }
+}
